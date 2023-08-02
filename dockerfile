@@ -1,5 +1,5 @@
 # Image yang akan digunakan dalam pembuatan container
-FROM node:14.5.0-alpine
+FROM node:14
 
 # Membuat work directory yaitu app
 WORKDIR /app
