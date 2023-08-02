@@ -1,0 +1,85 @@
+# Menentukan versi docker-compose yang digunakan, yaitu 3.7
+version: "3.7"
+
+# Mendefinisikan service yang akan dibuat
+services:
+
+  # Mendefinisikan service ke-1 yaitu item-app
+  item-app:
+    
+    # Mendefinisikan nama container
+    container_name: item-app
+
+    # item-app akan memakai image container bernama item-app dengan tag:v1
+    image: zakyfatih/submission-1:v1
+
+    command: 
+
+    # Mengekspos ke port:80 ke host dan port:8080 ke container
+    ports:
+      - 80:8080
+
+    networks:
+      - item-app-networks
+
+    environment:
+      NODE_ENV: production
+      DB_HOST: item-db
+
+    # Mendefinisikan working directory yaitu /app
+    working_dir: /app
+
+    # Mendefiniskan volume yang dipakai, yaitu pada working directory yang sudah dibuat sebelumnya
+    volumes:
+      - ./:/app
+
+    # Memastikan bahwa item-app hanya berjalan setelah item-db diluncurkan
+    depends_on:
+      - item-db
+
+    # Mendefiniskan restart policy yang jika container gagal berjalan, akan dilakukan restart otomatis
+    restart: on-failure
+
+  # Mendefinisikan service ke-2 yaitu item-db
+  item-db:
+
+    # Mendefinisikan nama container
+    container_name: item_db
+
+    # Menggunakan image mongo:3
+    image: mongo:3
+
+    # 
+    ports:
+      - 27017:27017
+
+    networks:
+      - item-app-networks
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root 
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: item_db
+
+    # Memakai volume bernama app-db dengan target /data/db
+    volumes:
+      - app-db:/data/db
+
+    # Mendefiniskan restart policy yang jika container gagal berjalan, akan dilakukan restart otomatis
+    restart: on-failure
+
+# Membuat satu buah volume bernama app-db
+volumes:
+
+  app-db:
+    name: app-db
+
+networks:
+
+  item-app-networks:
+    name: item-app-networks
+    driver: bridge
+
+
+
+
