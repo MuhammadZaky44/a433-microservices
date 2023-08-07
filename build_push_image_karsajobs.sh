@@ -1,5 +1,5 @@
 # Membuat docker image dari dockerfile dengan nama item-app dan tag:v1
-docker build -t zakyfatih/karsajobs:latest
+docker build -t zakyfatih/karsajobs:latest .
 
 # Mengubah nama image yang sudah dibuat menjadi sesuai nama repository Docker Hub
 # docker tag karsajobs:latest zakyfatih/karsajobs:latest
