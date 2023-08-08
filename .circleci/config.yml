@@ -9,8 +9,8 @@ jobs:
       # - setup_remote_docker: 
       #     version: 24.0.2
       - run:
-        name: Dockerfile lint
-        command: docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile
+          name: Dockerfile lint
+          command: docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile
   
   test-app:
     docker:
@@ -18,8 +18,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: test-app
-        command: go test -v -short --count=1 $(go list ./...)
+          name: test-app
+          command: go test -v -short --count=1 $(go list ./...)
 
   build-app-karsajobs:
     docker:
@@ -29,26 +29,24 @@ jobs:
       # - setup_remote_docker:
       #     version: 24.0.2
       - run:
-        name: Login Docker Hub
-        command: echo $PASSWORD_DOCKER_HUB | docker login -u $USERNAME_DOCKER_HUB --password-stdin
+          name: Login Docker Hub
+          command: echo $PASSWORD_DOCKER_HUB | docker login -u $USERNAME_DOCKER_HUB --password-stdin
 
       - run:
-        name: Docker build image
-        command: docker build -t $USERNAME_DOCKER_HUB/karsajobs-ui:latest .
+          name: Docker build image
+          command: docker build -t $USERNAME_DOCKER_HUB/karsajobs-ui:latest .
 
       - run:
-        name: Docker push image
-        command: docker push $USERNAME_DOCKER_HUB/karsajobs-ui:latest
+          name: Docker push image
+          command: docker push $USERNAME_DOCKER_HUB/karsajobs-ui:latest
 
 workflows:
   build-test-karsajobs:
     jobs:
       - lint-dockerfile
-      - test-app
-          # name: test-app
-          # requires:
-          #   - lint-dockerfile
-      - build-app-karsajobs
-          # name: build-app-karsajobs
-          # requires:
-          #   - test-app
+      - test-app:
+          requires:
+            - lint-dockerfile
+      - build-app-karsajobs:
+          requires:
+            - test-app
