@@ -59,4 +59,3 @@ spec:
       - name: secret
         secret:
           secretName: mongo-secret
-
