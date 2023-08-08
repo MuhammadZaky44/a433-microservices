@@ -1,0 +1,3 @@
+KARSAJOBS DOCKER HUB REPOSITORY LINK: https://hub.docker.com/repository/docker/zakyfatih/karsajobs/general
+
+KARSAJOBS-UI DOCKER HUB REPOSITORY LINK: https://hub.docker.com/repository/docker/zakyfatih/karsajobs-ui/general
