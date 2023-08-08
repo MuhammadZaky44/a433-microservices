@@ -1,0 +1,32 @@
+version: 2.1
+
+jobs: 
+  lint-dockerfile:
+    docker:
+      - image: cimg/base:2023.08
+    steps:
+      - checkout
+      # - setup_remote_docker: 
+      #     version: 24.0.2
+      - run:
+        name: Dockerfile lint
+        command: docker run --rm -i ghcr.io/hadolint/hadolint < Dockerfile
+  
+  build-app-karsajobs-ui:
+    docker:
+      - image: cimg/base:2023.08
+    steps:
+      - checkout
+      # - setup_remote_docker:
+      #     version: 24.0.2
+      - run:
+        name: Login Docker Hub
+        command: echo $PASSWORD_DOCKER_HUB | docker login -u $USERNAME_DOCKER_HUB --password-stdin
+
+      - run:
+        name: Docker build image
+        command: docker build -t $USERNAME_DOCKER_HUB/karsajobs-ui:latest .
+
+      - run:
+        name: Docker push image
+        command: docker push $USERNAME_DOCKER_HUB/karsajobs-ui:latest
