@@ -39,3 +39,14 @@ jobs:
       - run:
         name: Docker push image
         command: docker push $USERNAME_DOCKER_HUB/karsajobs-ui:latest
+
+workflows:
+  build-test-karsajobs:
+    jobs:
+      - lint-dockerfile
+      - test-app
+        requires: 
+          - lint-dockerfile
+      - build-app-karsajobs
+        requires:
+          - test-app
