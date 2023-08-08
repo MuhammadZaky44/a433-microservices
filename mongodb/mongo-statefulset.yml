@@ -1,0 +1,62 @@
+# membuat statefulset untuk mongodb
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo-statefulset
+  # Memberikan label app: mongo
+  labels:
+    app: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  serviceName: mongo
+  # Hanya membutuhkan 1 pod
+  replicas: 1
+  # Meng-set kalau pod dibuat <10 detik maka dikatakan availabe/aman, kalau lebih akan dibuat baru.
+  minReadySeconds: 10
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      # Meng-set termination grace period untuk pod selama 10 detik
+      terminationGracePeriodSeconds: 10
+
+      containers:
+      - image: mongo:3
+        name: mongodb
+
+        # Env variables
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME_FILE
+          value: /etc/mongo-credentials/MONGO_ROOT_USERNAME
+        - name: MONGO_INITDB_ROOT_PASSWORD_FILE
+          value: /etc/mongo-credentials/MONGO_ROOT_PASSWORD
+
+        # Port
+        ports:
+        - containerPort: 27017
+          name: mongo-port
+
+        # Mounting volume yang dipakai 
+        volumeMounts:
+        - name: data
+          mountPath: /data/db
+        - name: config
+          mountPath: /config
+        - name: secret
+          mountPath: /etc/mongo-credentials
+
+      # Membuat volume
+      volumes:
+      - name: data
+        persistentVolumeClaim: 
+          claimName: mongo-pvc
+      - name: config
+        configMap:
+          name: mongo-config
+      - name: secret
+        secret:
+          secretName: mongo-secret
+

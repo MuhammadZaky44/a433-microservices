@@ -1,0 +1,17 @@
+# Nembuat service dari mongodb
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+  # Memberikan label app: mongo
+  labels:
+    app: mongo
+spec:
+  # Mengeset port menjadi default port untuk mongodb yaitu 27017
+  ports:
+    - port: 27017
+      targetPort: 27017
+  # Mencari label app: mongo
+  selector:
+    app: mongo
+  clusterIP: None

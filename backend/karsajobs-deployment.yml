@@ -1,0 +1,51 @@
+# Membuat deployment backend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-be-deployment
+  # Memberikan label apps: karsajobs dan tier:backend
+  labels:
+    app: karsajobs
+    tier: backend
+spec:
+  # Hanya menentukan sebanyak 1 node
+  replicas: 1
+  selector:
+    # Mencari label tier: backend dan app: karsajobs
+    matchLabels:
+      tier: backend
+      app: karsajobs
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+        tier: backend
+    spec:
+      # Membuat container dengan nama 'karsajobs-be-deployment' dengan image file backend yang sudah di build
+      containers:
+      - name: karsajobs-be-deployment
+        image: zakyfatih/karsajobs:latest
+        ports:
+          - containerPort: 8080
+        resources:
+          requests:
+            cpu: 20m
+        env:
+          # Mengkonfigurasi env variable 'MONGO_USER' dengan mengambil secret key dari mongo-secret
+          - name: MONGO_USER
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: MONGO_ROOT_USERNAME
+          # Mengkonfigurasi env variable 'MONGO_PASS' dengan mengambil secret key dari mongo-secret
+          - name: MONGO_PASS
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: MONGO_ROOT_PASSWORD
+          # Menentukan 'APP_PORT' yaitu 8080
+          - name: APP_PORT
+            value: "8080"
+          # Menentukan 'MONGO_HOST' dari variable nama mongo-service
+          - name: MONGO_HOST
+            value: mongo-service

@@ -1,0 +1,17 @@
+# Membuat service untuk backend
+apiVersion: v1
+kind: Service
+# Memberikan nama service sebagai 'karsajobs-be-service'
+metadata:
+  name: karsajobs-be-service
+  # Memberikan label app: karsajobs
+  labels:
+    app: karsajobs
+spec:
+  # Membuka port pada port 8080
+  ports:
+  - port: 8080
+  # Mencari label tier: backend dan app: karsajobs
+  selector:
+    tier: backend
+    app: karsajobs

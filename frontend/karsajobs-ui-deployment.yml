@@ -1,0 +1,32 @@
+# Membuat deployment frontend
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-fe-deployment
+    # Memberikan label apps: karsajobs dan tier: frontend
+  labels:
+    app: karsajobs
+    tier: frontend
+spec:
+  # Hanya menentukan 1 node
+  replicas: 1
+  selector:
+    # Mencari label tier: frontend dan app: karsajobs
+    matchLabels:
+      tier: frontend
+      app: karsajobs
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+        tier: frontend
+    spec:
+      # Membuat container dengan nama 'karsajobs-fe-deployment' dengan image file backend yang sudah di build
+      containers:
+      - name: karsajobs-fe-deployment
+        image: zakyfatih/karsajobs-ui:latest
+        ports:
+          - containerPort: 8000
+        resources:
+          requests:
+            cpu: 20m

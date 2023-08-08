@@ -1,0 +1,28 @@
+# Membuat persisten volume dan claim untuk mongodb
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-pv
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi
+  # Meng-set access Mode dari PV
+  accessModes:
+    - ReadWriteOnce
+  # HostPath diset pada path /tmp
+  hostPath:
+    path: "/tmp"
+---
+# Membuat PVC dari PV yang sudah dibuat
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi

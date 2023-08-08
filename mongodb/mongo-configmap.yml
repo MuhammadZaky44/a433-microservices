@@ -1,0 +1,10 @@
+# Membuat configmap untuk mongodb
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-config
+data:
+  # Membuat file mongo.conf
+  mongo.conf: |
+    storage:
+      dbPath: /data/db
