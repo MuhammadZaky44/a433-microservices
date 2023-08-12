@@ -34,11 +34,11 @@ jobs:
 
       - run:
           name: Docker build image
-          command: docker build -t $USERNAME_DOCKER_HUB/karsajobs-ui:latest .
+          command: docker build -t $USERNAME_DOCKER_HUB/karsajobs:latest .
 
       - run:
           name: Docker push image
-          command: docker push $USERNAME_DOCKER_HUB/karsajobs-ui:latest
+          command: docker push $USERNAME_DOCKER_HUB/karsajobs:latest
 
 workflows:
   build-test-karsajobs:
