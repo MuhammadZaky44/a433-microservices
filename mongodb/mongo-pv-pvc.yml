@@ -11,7 +11,7 @@ spec:
     - ReadWriteOnce
   # HostPath diset pada path /tmp
   hostPath:
-    path: "/tmp"
+    path: "/data/db"
 ---
 # Membuat PVC dari PV yang sudah dibuat
 apiVersion: v1
